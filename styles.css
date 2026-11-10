@@ -1,0 +1,399 @@
+/* ============================================================
+   8282 — styles.css
+   All CSS: reset, custom properties, pager device, sender UI.
+   No decorative gradients. No glow effects. No pill-shaped badges.
+   ============================================================ */
+
+/* --- Custom Properties --- */
+:root {
+  --plastic:        #2a2a2a;
+  --plastic-dark:    #1a1a1a;
+  --plastic-light:   #3a3a3a;
+  --lcd-bg-off:      #051005;
+  --lcd-bg-on:       #0a3d0a;
+  --lcd-text:        #7CFC00;
+  --lcd-dim:         #4a7a00;
+  --rubber:          #1a1a1a;
+  --rubber-text:     #888;
+  --font-mono:       'Courier New', 'Cascadia Code', 'Source Code Pro',
+                     ui-monospace, monospace;
+}
+
+/* --- Reset --- */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #111;
+  color: #ccc;
+  font-family: var(--font-mono);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 24px 16px;
+}
+
+/* ============================================================
+   Pager Device
+   ============================================================ */
+
+.pager {
+  background: var(--plastic);
+  border: 2px solid var(--plastic-dark);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.6);
+  padding: 16px 16px 24px;
+  width: 300px;
+  position: relative;
+}
+
+.pager::before {
+  /* Top bezel strip (solid color, NOT a gradient) */
+  content: '';
+  display: block;
+  background: var(--plastic-light);
+  height: 8px;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+/* --- LCD --- */
+.lcd-frame {
+  background: #000;
+  border: 2px solid var(--plastic-dark);
+  border-radius: 4px;
+  padding: 2px;
+  position: relative;
+}
+
+.lcd {
+  background: var(--lcd-bg-off);
+  border-radius: 2px;
+  padding: 10px 12px;
+  min-height: 88px;
+  position: relative;
+  overflow: hidden;
+  color: transparent;
+  font-family: var(--font-mono);
+  transition: background 0.6s ease-out, color 0.4s ease-out 0.2s;
+}
+
+.lcd.alive {
+  background: var(--lcd-bg-on);
+  color: var(--lcd-text);
+}
+
+.lcd-main {
+  font-size: 26px;
+  letter-spacing: 3px;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  min-height: 30px;
+}
+
+.lcd-main.scroll {
+  animation: lcd-scroll 1.6s ease-out forwards;
+}
+
+@keyframes lcd-scroll {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0);    }
+}
+
+.lcd-callback {
+  font-size: 13px;
+  color: var(--lcd-dim);
+  margin-top: 4px;
+  min-height: 16px;
+}
+
+.lcd-decode {
+  font-size: 13px;
+  margin-top: 8px;
+  padding-top: 6px;
+  border-top: 1px solid var(--lcd-dim);
+  display: none;
+}
+
+.lcd-decode.visible { display: block; }
+
+.lcd-decode .meaning { font-weight: bold; }
+
+.lcd-decode .etymology {
+  font-size: 10px;
+  color: var(--lcd-dim);
+  margin-top: 3px;
+}
+
+.lcd-decode .note {
+  font-size: 10px;
+  color: var(--lcd-dim);
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+/* --- Dust overlay (speckle via box-shadow, no gradients) --- */
+.dust {
+  position: absolute;
+  inset: 0;
+  background: rgba(30,30,30,0.68);
+  border-radius: 2px;
+  box-shadow:
+       3px  1px 0 rgba(55,55,55,0.20),
+      -2px  4px 0 rgba(50,50,50,0.15),
+       5px  2px 0 rgba(60,60,60,0.10),
+      -1px  7px 0 rgba(45,45,45,0.18),
+       4px  5px 0 rgba(58,58,58,0.12),
+      -3px  2px 0 rgba(52,52,52,0.15),
+       6px  0 0 rgba(56,56,56,0.08),
+       0  5px 0 rgba(48,48,48,0.12),
+       2px  3px 0 rgba(53,53,53,0.10),
+      -4px  1px 0 rgba(50,50,50,0.12),
+       7px  3px 0 rgba(57,57,57,0.06),
+      -2px -1px 0 rgba(49,49,49,0.14);
+  transition: opacity 0.8s ease-out;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.dust.fade { opacity: 0; }
+
+/* --- Wake prompt --- */
+.wake-prompt {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 12px;
+  color: #444;
+  text-align: center;
+  z-index: 3;
+  animation: blink 1.6s steps(1) infinite;
+}
+
+@keyframes blink {
+  0%, 49%   { opacity: 0.35; }
+  50%, 100% { opacity: 0.85; }
+}
+
+.wake-prompt.hidden { display: none; }
+
+/* --- Rubber Buttons --- */
+.pager-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+  justify-content: center;
+}
+
+.btn-rubber {
+  background: var(--rubber);
+  border: 1px solid #000;
+  border-radius: 4px;
+  color: var(--rubber-text);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  padding: 8px 14px;
+  cursor: pointer;
+  box-shadow:
+    0 2px 0 #000,
+    inset 0 1px 1px rgba(255,255,255,0.03);
+  transition: box-shadow 0.08s, transform 0.08s;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.btn-rubber:active {
+  box-shadow: 0 0 0 #000, inset 0 1px 3px rgba(0,0,0,0.5);
+  transform: translateY(2px);
+}
+
+.btn-rubber:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* --- Inbox overlay (inside LCD frame) --- */
+.inbox-list {
+  position: absolute;
+  inset: 0;
+  background: var(--lcd-bg-on);
+  border-radius: 2px;
+  padding: 8px;
+  z-index: 5;
+  overflow-y: auto;
+  max-height: 200px;
+  font-size: 12px;
+  display: none;
+}
+
+.inbox-list.visible { display: block; }
+
+.inbox-entry {
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--lcd-dim);
+  cursor: pointer;
+  color: var(--lcd-text);
+}
+
+.inbox-entry:hover { background: rgba(124,252,0,0.08); }
+
+.inbox-entry .entry-digits { font-weight: bold; }
+
+.inbox-entry .entry-meta {
+  font-size: 10px;
+  color: var(--lcd-dim);
+  margin-top: 1px;
+}
+
+.inbox-clear {
+  margin-top: 8px;
+  width: 100%;
+  font-size: 10px;
+}
+
+.inbox-empty {
+  color: var(--lcd-dim);
+  font-size: 12px;
+  text-align: center;
+  padding: 16px 0;
+}
+
+/* ============================================================
+   Sender UI
+   ============================================================ */
+
+.sender {
+  max-width: 520px;
+  width: 100%;
+}
+
+.sender h1 {
+  font-size: 16px;
+  color: #999;
+  margin-bottom: 18px;
+  letter-spacing: 1px;
+}
+
+.sender .search-section { margin-bottom: 20px; }
+
+.sender input[type="text"] {
+  width: 100%;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 4px;
+  color: #ccc;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  padding: 8px 10px;
+}
+
+.sender input[type="text"]:focus {
+  outline: none;
+  border-color: #555;
+}
+
+.sender input[readonly] {
+  color: #777;
+}
+
+#results {
+  margin-top: 10px;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.result-item {
+  padding: 8px 10px;
+  border-bottom: 1px solid #1f1f1f;
+  cursor: pointer;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.result-item:hover { background: #1f1f1f; }
+
+.result-code {
+  color: var(--lcd-text);
+  font-weight: bold;
+  font-size: 16px;
+  min-width: 90px;
+}
+
+.result-meaning {
+  color: #777;
+  font-size: 13px;
+}
+
+.no-results {
+  color: #555;
+  padding: 12px 10px;
+  font-size: 13px;
+}
+
+.sender .compose-section {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sender .compose-section label {
+  font-size: 12px;
+  color: #666;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sender button {
+  background: var(--rubber);
+  border: 1px solid #000;
+  border-radius: 4px;
+  color: var(--rubber-text);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.sender button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.sender button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.link-output {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.link-output[hidden] { display: none; }
+
+.link-output input {
+  width: 100%;
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 4px;
+  color: #777;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 8px;
+}
+
+.copy-hint {
+  font-size: 11px;
+  color: #555;
+  display: none;
+}
+
+.copy-hint.visible { display: block; }

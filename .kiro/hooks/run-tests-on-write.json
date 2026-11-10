@@ -1,0 +1,15 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Run tests on file write",
+      "trigger": "PostToolUse",
+      "matcher": "fs_write|str_replace|fs_append",
+      "action": {
+        "type": "command",
+        "command": "npm test --silent",
+        "timeout": 30
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "version": "v1",
+  "hooks": [
+    {
+      "name": "Git status on session start",
+      "trigger": "SessionStart",
+      "action": {
+        "type": "command",
+        "command": "git status --short",
+        "timeout": 10
+      }
+    }
+  ]
+}
