@@ -397,3 +397,19 @@ body {
 }
 
 .copy-hint.visible { display: block; }
+
+/* --- Battery low indicator (dead state only) --- */
+.lcd-battery-low {
+  position: absolute;
+  bottom: 6px;
+  right: 10px;
+  font-size: 9px;
+  color: #333;
+  letter-spacing: 1px;
+  z-index: 3;
+  display: none;
+}
+
+.lcd:not(.alive) .lcd-battery-low {
+  display: block;
+}

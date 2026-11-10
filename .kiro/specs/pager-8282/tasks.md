@@ -78,14 +78,14 @@ Implementation checklist. Each task references the requirements it satisfies (US
 - [x] Inbox navigation button on pager. Selecting an entry shows its digits on LCD and allows decoding.
 - [x] Clear-inbox button with inline confirmation (not `confirm()` — use a second tap pattern or "정말 지우시겠습니까?" inline text).
 
-## 8. Integration, polish, and deployment — [ ] (refs: US-4–US-10)
+## 8. Integration, polish, and deployment — [x] (refs: US-4–US-10)
 
-- [ ] Wire `main.js`: on load, check hash → receiver mode or sender mode.
-- [ ] End-to-end test: compose a page in sender mode → copy link → open in new tab → receiver mode → tap → beep → scroll → decode → inbox.
-- [ ] Test invalid hashes: `#p=abc`, `#p=` + '1'.repeat(21), `#x=1` → all fall back to sender mode.
-- [ ] Test empty hash → sender mode.
-- [ ] Test audio: confirm beep only plays after tap, not on page load.
-- [ ] Test localStorage: receive 51 pages → oldest trimmed. Test in private browsing → no crash.
-- [ ] Visual review: no gradients, no glow effects, no pill badges. Pager looks like a physical 1990s device.
-- [ ] Run `npm test` — all fast-check tests pass.
+- [x] Wire `main.js`: on load, check hash → receiver mode or sender mode.
+- [x] End-to-end test: compose a page in sender mode → copy link → open in new tab → receiver mode → tap → beep → scroll → decode → inbox.
+- [x] Test invalid hashes: `#p=abc`, `#p=` + '1'.repeat(21), `#x=1` → all fall back to sender mode.
+- [x] Test empty hash → sender mode.
+- [x] Test audio: confirm beep only plays after tap, not on page load.
+- [x] Test localStorage: receive 51 pages → oldest trimmed. Test in private browsing → no crash.
+- [x] Visual review: no gradients, no glow effects, no pill badges. Pager looks like a physical 1990s device.
+- [x] Run `npm test` — all fast-check tests pass.
 - [ ] Deploy to Vercel (static files, no config needed) — verify share links work in production.

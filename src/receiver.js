@@ -25,6 +25,7 @@ export function initReceiver(container, pageData) {
           <div class="lcd-main" id="lcd-main"></div>
           <div class="lcd-callback" id="lcd-callback"></div>
           <div class="lcd-decode" id="lcd-decode"></div>
+          <div class="lcd-battery-low">BATTERY LOW</div>
           <div class="dust" id="dust"></div>
           <div class="wake-prompt" id="wake-prompt">TAP TO WAKE</div>
           <div class="inbox-list" id="inbox-list"></div>
@@ -33,27 +34,28 @@ export function initReceiver(container, pageData) {
       <div class="pager-buttons">
         <button class="btn-rubber" id="decode-btn" disabled>DECODE</button>
         <button class="btn-rubber" id="inbox-btn">INBOX</button>
+        <button class="btn-rubber" id="sendback-btn" disabled>SEND BACK</button>
       </div>
     </div>
   `;
 
-  const pager       = container.querySelector('#pager');
-  const lcd         = container.querySelector('#lcd');
-  const lcdMain     = container.querySelector('#lcd-main');
-  const lcdCallback = container.querySelector('#lcd-callback');
-  const lcdDecode   = container.querySelector('#lcd-decode');
-  const dust       = container.querySelector('#dust');
-  const wakePrompt  = container.querySelector('#wake-prompt');
-  const decodeBtn   = container.querySelector('#decode-btn');
-  const inboxBtn    = container.querySelector('#inbox-btn');
-  const inboxList   = container.querySelector('#inbox-list');
+  const pager        = container.querySelector('#pager');
+  const lcd          = container.querySelector('#lcd');
+  const lcdMain      = container.querySelector('#lcd-main');
+  const lcdCallback  = container.querySelector('#lcd-callback');
+  const lcdDecode    = container.querySelector('#lcd-decode');
+  const dust         = container.querySelector('#dust');
+  const wakePrompt   = container.querySelector('#wake-prompt');
+  const decodeBtn    = container.querySelector('#decode-btn');
+  const inboxBtn     = container.querySelector('#inbox-btn');
+  const sendbackBtn  = container.querySelector('#sendback-btn');
+  const inboxList    = container.querySelector('#inbox-list');
 
-  let state = 'dead';   // 'dead' → 'alive' → 'decoded'
+  let state = 'dead';
   let audioCtx = null;
 
   // --- Tap to wake ---
   pager.addEventListener('click', (e) => {
-    // Ignore clicks on buttons inside pager
     if (e.target.closest('button')) return;
     if (state === 'dead') resurrect();
   });
@@ -83,8 +85,9 @@ export function initReceiver(container, pageData) {
       lcdCallback.textContent = 'CB: ' + pageData.cb;
     }
 
-    // Enable decode
+    // Enable buttons
     decodeBtn.disabled = false;
+    sendbackBtn.disabled = false;
 
     // Store in inbox
     addPage(pageData);
@@ -150,7 +153,6 @@ export function initReceiver(container, pageData) {
     }
     inboxList.classList.add('visible');
 
-    // Attach entry click handlers
     inboxList.querySelectorAll('.inbox-entry').forEach((el) => {
       el.addEventListener('click', () => {
         const idx = parseInt(el.dataset.index, 10);
@@ -164,7 +166,6 @@ export function initReceiver(container, pageData) {
       });
     });
 
-    // Clear button with two-tap confirm
     const clearBtn = inboxList.querySelector('#clear-inbox');
     if (clearBtn) {
       clearBtn.addEventListener('click', () => {
@@ -178,4 +179,13 @@ export function initReceiver(container, pageData) {
       });
     }
   }
+
+  // --- SEND BACK button ---
+  sendbackBtn.addEventListener('click', () => {
+    if (pageData.cb) {
+      sessionStorage.setItem('pager8282_prefill_cb', pageData.cb);
+    }
+    window.location.hash = '';
+    window.location.reload();
+  });
 }

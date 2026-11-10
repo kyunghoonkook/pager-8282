@@ -110,6 +110,13 @@ export function initSender(container) {
     setTimeout(() => copyHint.classList.remove('visible'), 3000);
   });
 
+  // --- Prefill callback from "send back" ---
+  const prefillCb = sessionStorage.getItem('pager8282_prefill_cb');
+  if (prefillCb) {
+    cbInput.value = prefillCb;
+    sessionStorage.removeItem('pager8282_prefill_cb');
+  }
+
   // --- Initial: show all entries ---
   renderResults(CODEBOOK);
 }
