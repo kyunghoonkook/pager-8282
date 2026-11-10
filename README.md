@@ -44,7 +44,7 @@ Everything was done with **Kiro CLI** (3.1.0, free plan) in non-interactive chat
 - Done by hand, not by Kiro: `LICENSE`, `vercel.json`, `.gitignore`, this README, the Vercel deploy and the demo video.
 - Everything else, including `index.html`, `styles.css`, `src/main.js`, `src/codebook.js`, `src/hash.js` and `test/hash.test.mjs`, was written to disk by Kiro.
 
-The free plan has 50 credits a month; this build used about 30.
+The free plan has 50 credits a month; this build used about 27.
 
 ## License
 
